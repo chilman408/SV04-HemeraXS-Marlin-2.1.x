@@ -60,7 +60,7 @@
 // @section info
 
 // Author info of this build printed to the host during boot and M115
-#define STRING_CONFIG_H_AUTHOR "johncarlson21" // Who made the changes.
+#define STRING_CONFIG_H_AUTHOR "SV04EHR 230325" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
 #define MACVERSION      STRING_CONFIG_H_AUTHOR
 #define SOFTVERSION     SHORT_BUILD_VERSION
@@ -540,8 +540,8 @@
  *   999 : Dummy Table that ALWAYS reads 100°C or the temperature defined below.
  *
  */
-#define TEMP_SENSOR_0 1
-#define TEMP_SENSOR_1 1
+#define TEMP_SENSOR_0 5     // HC EHR Thermistor Changed from 1 to 5
+#define TEMP_SENSOR_1 5     // HC EHR Thermistor Changed from 1 to 5
 #define TEMP_SENSOR_2 0
 #define TEMP_SENSOR_3 0
 #define TEMP_SENSOR_4 0
@@ -574,14 +574,14 @@
 #endif
 
 #if HAS_E_TEMP_SENSOR
-  #define TEMP_RESIDENCY_TIME         10  // (seconds) Time to wait for hotend to "settle" in M109
-  #define TEMP_WINDOW                  1  // (°C) Temperature proximity for the "temperature reached" timer
-  #define TEMP_HYSTERESIS              3  // (°C) Temperature proximity considered "close enough" to the target
+  #define TEMP_RESIDENCY_TIME          3  // (seconds) Time to wait for hotend to "settle" in M109 HC EHR change to 3
+  #define TEMP_WINDOW                  3  // (°C) Temperature proximity for the "temperature reached" timer HC EHR changed to 3
+  #define TEMP_HYSTERESIS              3  // (°C) Temperature proximity considered "close enough" to the target 
 #endif
 
 #if TEMP_SENSOR_BED
-  #define TEMP_BED_RESIDENCY_TIME     10  // (seconds) Time to wait for bed to "settle" in M190
-  #define TEMP_BED_WINDOW              1  // (°C) Temperature proximity for the "temperature reached" timer
+  #define TEMP_BED_RESIDENCY_TIME      3  // (seconds) Time to wait for bed to "settle" in M190 HC EHR changed to 3
+  #define TEMP_BED_WINDOW              2  // (°C) Temperature proximity for the "temperature reached" timer HC EHR changed to 2
   #define TEMP_BED_HYSTERESIS          3  // (°C) Temperature proximity considered "close enough" to the target
 #endif
 
@@ -623,9 +623,9 @@
 // Above this temperature the heater will be switched off.
 // This can protect components from overheating, but NOT from shorts and failures.
 // (Use MINTEMP for thermistor short/failure protection.)
-#define HEATER_0_MAXTEMP 265
-#define HEATER_1_MAXTEMP 265
-#define HEATER_2_MAXTEMP 265
+#define HEATER_0_MAXTEMP 300     // HC EHR changed from 265 to 300
+#define HEATER_1_MAXTEMP 300     // HC EHR changed from 265 to 300
+#define HEATER_2_MAXTEMP 300     // HC EHR changed from 265 to 300
 #define HEATER_3_MAXTEMP 265
 #define HEATER_4_MAXTEMP 265
 #define HEATER_5_MAXTEMP 265
@@ -667,9 +667,9 @@
   #if ENABLED(PID_PARAMS_PER_HOTEND)
     // Specify up to one value per hotend here, according to your setup.
     // If there are fewer values, the last one applies to the remaining hotends.
-    #define DEFAULT_Kp_LIST {  22.20,  22.20 }
-    #define DEFAULT_Ki_LIST {   1.08,   1.08 }
-    #define DEFAULT_Kd_LIST { 114.00, 114.00 }
+    #define DEFAULT_Kp_LIST {  32.23,  32.23 }  // HC EHR Changed PID Values
+    #define DEFAULT_Ki_LIST {   5.60,   5.60 }
+    #define DEFAULT_Kd_LIST {  46.41,  46.41 }
   #else
     #define DEFAULT_Kp  23.81
     #define DEFAULT_Ki   1.93
@@ -756,9 +756,9 @@
 
   // 120V 250W silicone heater into 4mm borosilicate (MendelMax 1.5+)
   // from FOPDT model - kp=.39 Tp=405 Tdead=66, Tc set to 79.2, aggressive factor of .15 (vs .1, 1, 10)
-  #define DEFAULT_bedKp 312.84
-  #define DEFAULT_bedKi 52.04
-  #define DEFAULT_bedKd 1253.64
+  #define DEFAULT_bedKp 207.07
+  #define DEFAULT_bedKi 39.82
+  #define DEFAULT_bedKd 717.85
 
   // FIND YOUR OWN: "M303 E-1 C8 S90" to run autotune on the bed at 90 degreesC for 8 cycles.
 #endif // PIDTEMPBED
@@ -1226,7 +1226,7 @@
  * Override with M92
  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 64, 80, 400, 415, 415 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 64, 80, 400, 397, 397 }     // HC EHR changed E0 and E1 from 415 to 397
 
 /**
  * Default Max Feed Rate (linear=mm/s, rotational=°/s)
@@ -1293,7 +1293,7 @@
   #endif
 #endif
 
-#define DEFAULT_EJERK    15.0  // May be used by Linear Advance
+#define DEFAULT_EJERK    5.0  // May be used by Linear Advance HC EHR Changed to 5 for low Ejerk
 
 /**
  * Junction Deviation Factor
@@ -1541,7 +1541,7 @@
  *     |    [-]    |
  *     O-- FRONT --+
  */
-#define NOZZLE_TO_PROBE_OFFSET { 0, 25, 0 }
+#define NOZZLE_TO_PROBE_OFFSET { 7.87, 26.2, 0 }  // HC EHR changed from 0,25,0
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
@@ -1711,7 +1711,7 @@
 // @section extruder
 
 // For direct drive extruder v9 set to true, for geared extruder set to false.
-#define INVERT_E0_DIR true
+#define INVERT_E0_DIR false     // HC EHR reverse motor direction for Left Extruder
 #define INVERT_E1_DIR true
 #define INVERT_E2_DIR false
 #define INVERT_E3_DIR false
@@ -1756,7 +1756,7 @@
 #define Y_BED_SIZE 302
 
 // Travel limits (linear=mm, rotational=°) after homing, corresponding to endstop positions.
-#define X_MIN_POS -62
+#define X_MIN_POS -68     // HC EHR changed from -62 to -68
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
 #define X_MAX_POS X_BED_SIZE
@@ -1981,7 +1981,7 @@
    */
   #define ENABLE_LEVELING_FADE_HEIGHT
   #if ENABLED(ENABLE_LEVELING_FADE_HEIGHT)
-    #define DEFAULT_LEVELING_FADE_HEIGHT 1.0 // (mm) Default fade height.
+    #define DEFAULT_LEVELING_FADE_HEIGHT 10.0 // (mm) Default fade height HC EHR changed fade to 10.0
   #endif
 
   /**
