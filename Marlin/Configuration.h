@@ -60,7 +60,7 @@
 // @section info
 
 // Author info of this build printed to the host during boot and M115
-#define STRING_CONFIG_H_AUTHOR "SV04EHR 230325" // Who made the changes.
+#define STRING_CONFIG_H_AUTHOR "SV04EHR V230328" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
 #define MACVERSION      STRING_CONFIG_H_AUTHOR
 #define SOFTVERSION     SHORT_BUILD_VERSION
@@ -671,9 +671,9 @@
     #define DEFAULT_Ki_LIST {   5.60,   5.60 }
     #define DEFAULT_Kd_LIST {  46.41,  46.41 }
   #else
-    #define DEFAULT_Kp  23.81
-    #define DEFAULT_Ki   1.93
-    #define DEFAULT_Kd  73.64
+    #define DEFAULT_Kp  32.23    // HC EHR changed for regression
+    #define DEFAULT_Ki   5.60
+    #define DEFAULT_Kd  46.41
   #endif
 #endif
 
@@ -3286,20 +3286,20 @@
 // Use software PWM to drive the fan, as for the heaters. This uses a very low frequency
 // which is not as annoying as with the hardware PWM. On the other hand, if this frequency
 // is too low, you should also increment SOFT_PWM_SCALE.
-//#define FAN_SOFT_PWM
+#define FAN_SOFT_PWM     // HC EHR Enabled
 
 // Incrementing this by 1 will double the software PWM frequency,
 // affecting heaters, and the fan if FAN_SOFT_PWM is enabled.
 // However, control resolution will be halved for each increment;
 // at zero value, there are 128 effective control positions.
 // :[0,1,2,3,4,5,6,7]
-#define SOFT_PWM_SCALE 5
+#define SOFT_PWM_SCALE 1     // HC EHR changed from 5 to 1
 
 // If SOFT_PWM_SCALE is set to a value higher than 0, dithering can
 // be used to mitigate the associated resolution loss. If enabled,
 // some of the PWM cycles are stretched so on average the desired
 // duty cycle is attained.
-//#define SOFT_PWM_DITHER
+#define SOFT_PWM_DITHER     // HC EHR Enabled
 
 // @section extras
 
