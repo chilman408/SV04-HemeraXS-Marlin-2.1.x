@@ -357,7 +357,7 @@ void RTSSHOW::RTS_Init()
     }
   #endif
   #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
-    SERIAL_ECHOLNPGM("lets build and set bed mesh info");
+    //SERIAL_ECHOLNPGM("lets build and set bed mesh info");
     bool zig = false;
     int8_t inStart, inStop, inInc, showcount;
     showcount = 0;
@@ -381,12 +381,12 @@ void RTSSHOW::RTS_Init()
       zig ^= true;
       for (int x = inStart; x != inStop; x += inInc)
       {
-        SERIAL_ECHOLNPGM("value: ", bedlevel.z_values[x][y] * 1000);
+        //SERIAL_ECHOLNPGM("value: ", bedlevel.z_values[x][y] * 1000);
         RTS_SndData(bedlevel.z_values[x][y] * 1000, AUTO_BED_LEVEL_1POINT_VP + showcount * 2);
         showcount++;
       }
     }
-    SERIAL_ECHOLNPGM("should have output the mesh");
+    //SERIAL_ECHOLNPGM("should have output the mesh");
     queue.enqueue_now_P(PSTR("M420 S1"));
   #endif
 
@@ -417,6 +417,9 @@ void RTSSHOW::RTS_Init()
   /***************transmit E-Steps to screen*******************/
   RTS_SndData(planner.settings.axis_steps_per_mm[3], E0_SET_STEP_VP);
   RTS_SndData(planner.settings.axis_steps_per_mm[4], E1_SET_STEP_VP);
+  RTS_SndData(planner.settings.axis_steps_per_mm[0], X_SET_STEP_VP);
+  RTS_SndData(planner.settings.axis_steps_per_mm[1], Y_SET_STEP_VP);
+  RTS_SndData(planner.settings.axis_steps_per_mm[2], Z_SET_STEP_VP);
   RTS_SndData(planner.flow_percentage[0], E0_SET_FLOW_VP);
   RTS_SndData(planner.flow_percentage[1], E1_SET_FLOW_VP);
   RTS_SndData(thermalManager.fan_speed[0], E0_SET_FAN_VP);
@@ -754,7 +757,7 @@ void RTSSHOW::RTS_SDcard_Stop()
   }
   #ifdef EVENT_GCODE_SD_ABORT
     //char abtcmd[21] = "";
-    SERIAL_ECHOLNPGM("starting stop");
+    //SERIAL_ECHOLNPGM("starting stop");
     queue.inject(PSTR(EVENT_GCODE_SD_ABORT));
     // need to fix this..
     SERIAL_ECHOLNPGM("event gcode sd abort finished");
@@ -763,11 +766,11 @@ void RTSSHOW::RTS_SDcard_Stop()
     //queue.inject_P(PSTR(EVENT_GCODE_SD_ABORT));
     //queue.inject_P(PSTR(abtcmd));
   #endif
-  SERIAL_ECHOLNPGM("should delay");
+  //SERIAL_ECHOLNPGM("should delay");
   delay(2);
-  SERIAL_ECHOLNPGM("shutdown planner");
+  //SERIAL_ECHOLNPGM("shutdown planner");
   planner.finish_and_disable();
-  SERIAL_ECHOLNPGM("planner shutdown");
+  //SERIAL_ECHOLNPGM("planner shutdown");
 
   // shut down the stepper motor.
   queue.inject(PSTR("M84"));
@@ -817,7 +820,7 @@ void RTSSHOW::RTS_HandleData()
   }
 
   char cmd[MAX_CMD_SIZE+16];
-  char cmd2[MAX_CMD_SIZE+16];
+  //char cmd2[MAX_CMD_SIZE+16];
 
   switch(Checkkey)
   {
@@ -1019,17 +1022,17 @@ void RTSSHOW::RTS_HandleData()
       }
       else if(recdat.data[0] == 3)
       {
-        SERIAL_ECHOLNPGM("PoweroffContinue: ", PoweroffContinue);
+        //SERIAL_ECHOLNPGM("PoweroffContinue: ", PoweroffContinue);
         //heat and change filament, and resume
         if(PoweroffContinue == true)
         {
-          SERIAL_ECHOLNPGM("PoweroffContinue: true change to page 8");
+          //SERIAL_ECHOLNPGM("PoweroffContinue: true change to page 8");
           RTS_SndData(ExchangePageBase + 8, ExchangepageAddr);
           PoweroffContinue = false; // added by John Carlson to reset the flag
         }
         else if(PoweroffContinue == false)
         {
-          SERIAL_ECHOLNPGM("PoweroffContinue: false run heatup command");
+          //SERIAL_ECHOLNPGM("PoweroffContinue: false run heatup command");
           char cmd[MAX_CMD_SIZE+16];
           char *c;
           sprintf_P(cmd, PSTR("M23 %s"), fileInfo.currentFilePath);
@@ -1038,11 +1041,11 @@ void RTSSHOW::RTS_HandleData()
             *c = tolower(*c);
 
           //queue.enqueue_one_now(cmd);
-          SERIAL_ECHOLNPGM("cmd after:", cmd);
+          //SERIAL_ECHOLNPGM("cmd after:", cmd);
           queue.inject(cmd);
           delay(20);
           //queue.enqueue_now_P(PSTR("M24"));
-          SERIAL_ECHOLNPGM("run m24");
+          //SERIAL_ECHOLNPGM("run m24");
           queue.inject(PSTR("M24"));
           // clean screen.
           for (int j = 0; j < 20; j ++)
@@ -1054,13 +1057,13 @@ void RTSSHOW::RTS_HandleData()
           #if ENABLED(BABYSTEPPING)
             RTS_SndData(0, AUTO_BED_LEVEL_ZOFFSET_VP);
           #endif
-          SERIAL_ECHOLNPGM("set screen settings");
+          //SERIAL_ECHOLNPGM("set screen settings");
           feedrate_percentage = 100;
           RTS_SndData(feedrate_percentage, PRINT_SPEED_RATE_VP);
           zprobe_zoffset = last_zoffset;
           RTS_SndData(probe.offset.z * 100, AUTO_BED_LEVEL_ZOFFSET_VP);
           PoweroffContinue = true;
-          SERIAL_ECHOLNPGM("power off continue: true and change to page 11");
+          //SERIAL_ECHOLNPGM("power off continue: true and change to page 11");
           RTS_SndData(ExchangePageBase + 11, ExchangepageAddr);
           sdcard_pause_check = true;
         }
@@ -1231,7 +1234,7 @@ void RTSSHOW::RTS_HandleData()
       break;
 
     case Heater0TempEnterKey:
-      SERIAL_ECHOLNPGM("Heater0TempKey: ", recdat.data[0]);
+      //SERIAL_ECHOLNPGM("Heater0TempKey: ", recdat.data[0]);
       int h1tgt;
       if (recdat.data[0] >= HEATER_0_MAXTEMP) {
         h1tgt = HEATER_0_MAXTEMP;
@@ -1291,6 +1294,30 @@ void RTSSHOW::RTS_HandleData()
       RTS_SndData(StartSoundSet, SoundAddr);
       RTS_SndData(recdat.data[0], E1_SET_STEP_VP);
       break;
+
+         case XStepsKey:
+      sprintf_P(cmd, PSTR("M92 X%d"), recdat.data[0]);
+      queue.enqueue_now_P(cmd);
+      queue.enqueue_now_P(PSTR("M500"));
+      RTS_SndData(StartSoundSet, SoundAddr);
+      RTS_SndData(recdat.data[0], X_SET_STEP_VP);
+      break;
+
+    case YStepsKey:
+      sprintf_P(cmd, PSTR("M92 Y%d"), recdat.data[0]);
+      queue.enqueue_now_P(cmd);
+      queue.enqueue_now_P(PSTR("M500"));
+      RTS_SndData(StartSoundSet, SoundAddr);
+      RTS_SndData(recdat.data[0], Y_SET_STEP_VP);
+      break;
+
+    case ZStepsKey:
+      sprintf_P(cmd, PSTR("M92 Z%d"), recdat.data[0]);
+      queue.enqueue_now_P(cmd);
+      queue.enqueue_now_P(PSTR("M500"));
+      RTS_SndData(StartSoundSet, SoundAddr);
+      RTS_SndData(recdat.data[0], Z_SET_STEP_VP);
+      break; 
     // end updating for e-steps
     // added by John Carlson for updating flow
     case E0FlowKey:
@@ -1333,6 +1360,31 @@ void RTSSHOW::RTS_HandleData()
       break;
     // end updating for fan speed
 
+    case ZOffsetKey: // manual type zoffset
+      SERIAL_ECHOLNPGM("ZOffsetKey Value: ", recdat.data[0]);
+      float tmp_zprobe_offset;
+
+      if (recdat.data[0] >= 32768)
+      {
+        tmp_zprobe_offset = (recdat.data[0] - 65536) / 100.0;
+      }
+      else
+      {
+        tmp_zprobe_offset = (recdat.data[0]) / 100.0;
+      }
+      last_zoffset = zprobe_zoffset;
+      //SERIAL_ECHOLNPGM("Last ZOffset: ", last_zoffset);
+      if (WITHIN((tmp_zprobe_offset), Z_PROBE_OFFSET_RANGE_MIN, Z_PROBE_OFFSET_RANGE_MAX))
+      {
+        zprobe_zoffset = tmp_zprobe_offset;
+        //SERIAL_ECHOLNPGM("Add babbystep: ", tmp_zprobe_offset - last_zoffset);
+        babystep.add_mm(Z_AXIS, tmp_zprobe_offset - last_zoffset);
+        probe.offset.z = zprobe_zoffset;
+      }
+      RTS_SndData(probe.offset.z * 100, AUTO_BED_LEVEL_ZOFFSET_VP);
+
+      break;
+
     case ChangeFilamentKey: //FILAMENT_RUNOUT_SCRIPT
       char cmdF[MAX_CMD_SIZE+16];
       sprintf_P(cmdF, PSTR(FILAMENT_RUNOUT_SCRIPT), recdat.data[0]);
@@ -1362,7 +1414,7 @@ void RTSSHOW::RTS_HandleData()
       else if(recdat.data[0] == 3)
       {
         AxisUnitMode = 1;
-        axis_unit = 0.1;
+        axis_unit = 0.01;
         RTS_SndData(ExchangePageBase + 31, ExchangepageAddr);
       }
       else if(recdat.data[0] == 4)
@@ -2131,6 +2183,9 @@ void RTSSHOW::RTS_HandleData()
               queue.enqueue_now_P(PSTR("M605 S2 X150 R0"));
               queue.enqueue_now_P(PSTR("M605 S3"));
               break;
+            case 4:
+              queue.enqueue_now_P(PSTR("M605 S4"));
+              break;
             default:
               queue.enqueue_now_P(PSTR("M605 S0"));
               break;
@@ -2285,7 +2340,7 @@ void RTSSHOW::RTS_HandleData()
         strcpy(cmdbuf, cmd);
 
         save_dual_x_carriage_mode = dualXPrintingModeStatus;
-        //SERIAL_ECHOLNPGM("dualXPrintingModeStatus: ", dualXPrintingModeStatus);
+        SERIAL_ECHOLNPGM("dualXPrintingModeStatus: ", dualXPrintingModeStatus);
         
         switch(save_dual_x_carriage_mode)
         {
@@ -2298,6 +2353,9 @@ void RTSSHOW::RTS_HandleData()
           case 3:
             queue.enqueue_now_P(PSTR("M605 S2 X150 R0"));
             queue.enqueue_now_P(PSTR("M605 S3"));
+            break;
+          case 4:
+            queue.enqueue_now_P(PSTR("M605 S4"));
             break;
           default:
             queue.enqueue_now_P(PSTR("M605 S0"));
