@@ -60,7 +60,7 @@
 // @section info
 
 // Author info of this build printed to the host during boot and M115
-#define STRING_CONFIG_H_AUTHOR "SV04EHR V230408" // Who made the changes.
+#define STRING_CONFIG_H_AUTHOR "SV04EHR V230513" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
 #define MACVERSION      STRING_CONFIG_H_AUTHOR
 #define SOFTVERSION     SHORT_BUILD_VERSION
@@ -1545,7 +1545,7 @@
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
-#define PROBING_MARGIN 25
+#define PROBING_MARGIN 15
 
 // X and Y axis travel speed (mm/min) between probes
 #define XY_PROBE_FEEDRATE (200*60) // John Carlson increase travel speed between probes 
@@ -1752,11 +1752,11 @@
 // @section geometry
 
 // The size of the printable area
-#define X_BED_SIZE 302
-#define Y_BED_SIZE 302
+#define X_BED_SIZE 292
+#define Y_BED_SIZE 312
 
 // Travel limits (linear=mm, rotational=°) after homing, corresponding to endstop positions.
-#define X_MIN_POS -68     // HC EHR changed from -62 to -68
+#define X_MIN_POS -66     // HC EHR changed from -62 to -66
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
 #define X_MAX_POS X_BED_SIZE
